@@ -24,18 +24,18 @@ Las versiones se publican en [Releases](https://github.com/xxxbii/coqui/releases
 
 ## Servidor y llave
 
-El servidor y la llave pública se incrustan al compilar. Vienen de dos secretos del repositorio (Settings, Secrets and variables, Actions):
+El servidor y la llave pública se incrustan al compilar. Sus valores están en el flujo `.github/workflows/coqui.yml` y se pueden reemplazar, sin tocar el código, con las variables del repositorio `COQUI_HOST` y `COQUI_KEY` (Settings, Secrets and variables, Actions, pestaña Variables):
 
-| Secreto | Valor |
-| --- | --- |
-| `COQUI_HOST` | Dominio o IP del servidor de IDs (hbbs), sin `http://`. El puerto es opcional; por defecto se usa 21116. |
-| `COQUI_KEY` | Contenido de `id_ed25519.pub` del servidor (44 caracteres). |
+| Variable | Valor actual | Qué es |
+| --- | --- | --- |
+| `COQUI_HOST` | `srv1579804.hstgr.cloud` | Dominio o IP del servidor de IDs (hbbs), sin `http://`. El puerto es opcional; por defecto se usa 21116. |
+| `COQUI_KEY` | `tkUOZtLzSVmqo1HNGwTSbfenitSHytefffHOq186CVA=` | Contenido de `id_ed25519.pub` del servidor (44 caracteres). |
 
-El código está en `libs/hbb_common/src/config.rs`: si una variable no existe o está vacía, se usan los valores de RustDesk, pero el flujo de publicación se detiene antes de compilar si falta cualquiera de los dos secretos o si su formato no es válido, y después de compilar comprueba que ambos quedaron dentro de la app. El relay es el que anuncie el servidor o, si no anuncia ninguno, el mismo servidor en el puerto 21117. El servidor de cuentas (API) se deduce como `http://<servidor>:21114`; el instalador básico no lo incluye, así que el inicio de sesión y la libreta de direcciones no funcionan hasta que haya uno.
+El código está en `libs/hbb_common/src/config.rs`: si una variable de compilación no existe o está vacía, se usan los valores de RustDesk. El flujo de publicación siempre las define, revisa su formato antes de compilar y, después de compilar, comprueba que el servidor y la llave quedaron dentro de la app. El relay es el que anuncie el servidor o, si no anuncia ninguno, el mismo servidor en el puerto 21117. El servidor de cuentas (API) se deduce como `http://<servidor>:21114`; el instalador básico no lo incluye, así que el inicio de sesión y la libreta de direcciones no funcionan hasta que haya uno.
 
 ## Cómo compilar
 
-1. Crea los secretos `COQUI_HOST` y `COQUI_KEY`. Para firmar los APK de Android con una llave propia, crea también `ANDROID_SIGNING_KEY` (el keystore en base64), `ANDROID_ALIAS`, `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Sin ellos, los APK salen con una firma de depuración.
+1. Para usar otro servidor, crea las variables del repositorio `COQUI_HOST` y `COQUI_KEY`; si no existen, se usan los valores de la tabla anterior. Para firmar los APK de Android con una llave propia, crea los secretos `ANDROID_SIGNING_KEY` (el keystore en base64), `ANDROID_ALIAS`, `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Sin ellos, los APK salen con una firma de depuración.
 2. Haz que `coqui` sea la rama predeterminada del repositorio (GitHub solo muestra los flujos manuales que existen en esa rama) y activa Actions si el fork las tiene desactivadas.
 3. En Actions, abre **Coquí: compilar y publicar**, pulsa **Run workflow** y escribe la versión (por ejemplo `1.0.0`).
 4. Al terminar queda publicado el release `coqui-v<versión>` con los archivos de la tabla de descargas.
@@ -54,7 +54,7 @@ El instalador levanta el servidor de IDs y el relay de RustDesk en Docker y usa 
 
 ## Notas de seguridad
 
-- **La llave pública no es secreta.** Va dentro de la app y cualquiera puede extraerla de un release. Sirve para que la app compruebe que habla con nuestro servidor y no con uno falso. Se guarda como secreto para que no quede escrita en el código, no porque sea confidencial.
+- **La llave pública no es secreta.** Va dentro de la app, aparece en la página pública de Coquí y cualquiera puede extraerla de un release. Sirve para que la app compruebe que habla con nuestro servidor y no con uno falso.
 - **Cualquiera que tenga la app puede usar el servidor.** El servidor libre no tiene cuentas, así que la protección real está en cada equipo: usa contraseñas permanentes fuertes o la aprobación con clic, y no compartas el ID junto con la contraseña. Nadie legítimo pide acceso por sorpresa.
 - **Las sesiones van cifradas de extremo a extremo.** El relay solo pasa datos que no puede leer.
 - **Coquí no se actualiza desde RustDesk.** La comprobación de versiones y la actualización automática de RustDesk están desactivadas en esta app; las versiones nuevas salen solo de los Releases de este repositorio.

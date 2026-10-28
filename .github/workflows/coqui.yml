@@ -37,14 +37,16 @@ env:
   # Copiado de bridge.yml.
   CARGO_EXPAND_VERSION: "1.0.95"
   FLUTTER_RUST_BRIDGE_VERSION: "1.80.1"
-  # Coquí: servidor y llave que se incrustan al compilar (libs/hbb_common/src/config.rs).
-  COQUI_HOST: ${{ secrets.COQUI_HOST }}
-  COQUI_KEY: ${{ secrets.COQUI_KEY }}
+  # Coquí: servidor y llave pública que se incrustan al compilar (libs/hbb_common/src/config.rs).
+  # No son secretos: van dentro de la app y salen en la página pública de Coquí. Las variables
+  # del repositorio COQUI_HOST y COQUI_KEY, si existen, reemplazan estos valores.
+  COQUI_HOST: ${{ vars.COQUI_HOST || 'srv1579804.hstgr.cloud' }}
+  COQUI_KEY: ${{ vars.COQUI_KEY || 'tkUOZtLzSVmqo1HNGwTSbfenitSHytefffHOq186CVA=' }}
   COQUI_VERSION: ${{ inputs.version }}
 
 jobs:
   verificar:
-    name: Verificar versión y secretos
+    name: Verificar versión, servidor y llave
     runs-on: ubuntu-24.04
     steps:
       - name: Revisar entradas
@@ -55,14 +57,14 @@ jobs:
           [[ "$COQUI_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] \
             || fail "La versión debe tener la forma 1.0.0."
           [[ -n "$COQUI_HOST" ]] \
-            || fail "Falta el secreto COQUI_HOST. Sin él la app usaría los servidores públicos de RustDesk."
+            || fail "COQUI_HOST está vacío. Sin servidor la app usaría los servidores públicos de RustDesk."
           [[ -n "$COQUI_KEY" ]] \
-            || fail "Falta el secreto COQUI_KEY (contenido de id_ed25519.pub del servidor)."
+            || fail "COQUI_KEY está vacía (debe ser el contenido de id_ed25519.pub del servidor)."
           [[ "$COQUI_HOST" =~ ^[A-Za-z0-9._-]+(:[0-9]{1,5})?$ || "$COQUI_HOST" =~ ^\[[0-9A-Fa-f:.]+\](:[0-9]{1,5})?$ ]] \
             || fail "COQUI_HOST debe ser solo el dominio o la IP del servidor, sin http://, rutas ni espacios."
           [[ "$COQUI_KEY" =~ ^[A-Za-z0-9+/]{43}=$ ]] \
             || fail "COQUI_KEY no parece una llave pública de RustDesk (44 caracteres en base64, sin espacios ni saltos de línea)."
-          echo "Versión ${COQUI_VERSION}: secretos presentes y con formato válido."
+          echo "Versión ${COQUI_VERSION}, servidor ${COQUI_HOST}, llave ${COQUI_KEY}: formato válido."
 
   generate-bridge:
     needs: [verificar]
