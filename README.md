@@ -1,182 +1,62 @@
-<p align="center">
-  <img src="res/logo-header.svg" alt="RustDesk - Your remote desktop"><br>
-  <a href="#raw-steps-to-build">Build</a> •
-  <a href="#how-to-build-with-docker">Docker</a> •
-  <a href="#file-structure">Structure</a> •
-  <a href="#screenshots">Screenshots</a><br>
-  [<a href="docs/README-UA.md">Українська</a>] | [<a href="docs/README-CS.md">česky</a>] | [<a href="docs/README-ZH.md">中文</a>] | [<a href="docs/README-HU.md">Magyar</a>] | [<a href="docs/README-ES.md">Español</a>] | [<a href="docs/README-FA.md">فارسی</a>] | [<a href="docs/README-FR.md">Français</a>] | [<a href="docs/README-DE.md">Deutsch</a>] | [<a href="docs/README-PL.md">Polski</a>] | [<a href="docs/README-ID.md">Indonesian</a>] | [<a href="docs/README-FI.md">Suomi</a>] | [<a href="docs/README-ML.md">മലയാളം</a>] | [<a href="docs/README-JP.md">日本語</a>] | [<a href="docs/README-NL.md">Nederlands</a>] | [<a href="docs/README-IT.md">Italiano</a>] | [<a href="docs/README-RU.md">Русский</a>] | [<a href="docs/README-PTBR.md">Português (Brasil)</a>] | [<a href="docs/README-EO.md">Esperanto</a>] | [<a href="docs/README-KR.md">한국어</a>] | [<a href="docs/README-AR.md">العربي</a>] | [<a href="docs/README-VN.md">Tiếng Việt</a>] | [<a href="docs/README-DA.md">Dansk</a>] | [<a href="docs/README-GR.md">Ελληνικά</a>] | [<a href="docs/README-TR.md">Türkçe</a>] | [<a href="docs/README-NO.md">Norsk</a>] | [<a href="docs/README-RO.md">Română</a>]<br>
-  <b>We need your help to translate this README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> and <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> to your native language</b>
-</p>
+# Coquí
 
-> [!Caution]
-> **Misuse Disclaimer:** <br>
-> The developers of RustDesk do not condone or support any unethical or illegal use of this software. Misuse, such as unauthorized access, control or invasion of privacy, is strictly against our guidelines. The authors are not responsible for any misuse of the application.
+Coquí es el cliente de control remoto de [Yunque](https://yunque-blond.vercel.app). Es una versión modificada de [RustDesk](https://github.com/rustdesk/rustdesk) 1.5.0 que viene configurada de fábrica para conectarse solo a nuestro servidor: no hay que escribir el servidor ni la llave en cada equipo.
 
+## Créditos y licencia
 
-Chat with us: [Discord](https://discord.gg/nDceKgxnkV) | [Twitter](https://twitter.com/rustdesk) | [Reddit](https://www.reddit.com/r/rustdesk) | [YouTube](https://www.youtube.com/@rustdesk)
+Coquí existe gracias al trabajo del equipo de RustDesk (Purslane Tech Pte. Ltd. y sus colaboradores). Igual que RustDesk, se distribuye bajo la licencia AGPL-3.0; el texto completo está en [LICENCE](LICENCE). El código fuente de cada versión publicada está en la rama `coqui` de este repositorio, y el README original de RustDesk se conserva en [README-RustDesk.md](README-RustDesk.md).
 
-[![RustDesk Server Pro](https://img.shields.io/badge/RustDesk%20Server%20Pro-Advanced%20Features-blue)](https://rustdesk.com/pricing.html)
+## Descargas
 
-Yet another remote desktop solution, written in Rust. Works out of the box with no configuration required. You have full control of your data, with no concerns about security. You can use our rendezvous/relay server, [set up your own](https://rustdesk.com/server), or [write your own rendezvous/relay server](https://github.com/rustdesk/rustdesk-server-demo).
+Las versiones se publican en [Releases](https://github.com/xxxbii/coqui/releases) con la etiqueta `coqui-v<versión>`:
 
-![image](https://user-images.githubusercontent.com/71636191/171661982-430285f0-2e12-4b1d-9957-4a58e375304d.png)
+| Archivo | Para qué sirve |
+| --- | --- |
+| `Coqui-<versión>-windows-x64.exe` | Windows 10 u 11 de 64 bits. Funciona sin instalar; desde la app se puede instalar como servicio. |
+| `Coqui-<versión>-android-universal.apk` | Cualquier teléfono o tableta Android. |
+| `Coqui-<versión>-android-arm64.apk`, `-armv7.apk`, `-x86_64.apk` | La misma app, más liviana, para un tipo de procesador específico. |
+| `SHA256SUMS.txt` | Huellas SHA-256 para verificar las descargas. |
 
-RustDesk welcomes contribution from everyone. See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for help getting started.
+## Plataformas
 
-[**FAQ**](https://github.com/rustdesk/rustdesk/wiki/FAQ)
+- **Windows (x64) y Android:** app Coquí con su nombre, sus íconos y nuestro servidor ya integrados.
+- **iPhone, Mac y Linux:** se usa la app oficial de RustDesk, configurada con nuestro servidor y nuestra llave pública (Yunque genera el código y el QR para configurarla).
 
-[**BINARY DOWNLOAD**](https://github.com/rustdesk/rustdesk/releases)
+## Servidor y llave
 
-[**NIGHTLY BUILD**](https://github.com/rustdesk/rustdesk/releases/tag/nightly)
+El servidor y la llave pública se incrustan al compilar. Vienen de dos secretos del repositorio (Settings, Secrets and variables, Actions):
 
-[<img src="https://f-droid.org/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/en/packages/com.carriez.flutter_hbb)
-[<img src="https://flathub.org/api/badge?svg&locale=en"
-    alt="Get it on Flathub"
-    height="80">](https://flathub.org/apps/com.rustdesk.RustDesk)
+| Secreto | Valor |
+| --- | --- |
+| `COQUI_HOST` | Dominio o IP del servidor de IDs (hbbs), sin `http://`. El puerto es opcional; por defecto se usa 21116. |
+| `COQUI_KEY` | Contenido de `id_ed25519.pub` del servidor (44 caracteres). |
 
-## Dependencies
+El código está en `libs/hbb_common/src/config.rs`: si una variable no existe o está vacía, se usan los valores de RustDesk, pero el flujo de publicación se detiene antes de compilar si falta cualquiera de los dos secretos o si su formato no es válido, y después de compilar comprueba que ambos quedaron dentro de la app. El relay es el que anuncie el servidor o, si no anuncia ninguno, el mismo servidor en el puerto 21117. El servidor de cuentas (API) se deduce como `http://<servidor>:21114`; el instalador básico no lo incluye, así que el inicio de sesión y la libreta de direcciones no funcionan hasta que haya uno.
 
-Desktop versions use Flutter or Sciter (deprecated) for GUI. This tutorial is for Sciter only, since it is easier and more friendly to start. Check out our [CI](https://github.com/rustdesk/rustdesk/blob/master/.github/workflows/flutter-build.yml) for building the Flutter version.
+## Cómo compilar
 
-Please download Sciter dynamic library yourself.
+1. Crea los secretos `COQUI_HOST` y `COQUI_KEY`. Para firmar los APK de Android con una llave propia, crea también `ANDROID_SIGNING_KEY` (el keystore en base64), `ANDROID_ALIAS`, `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Sin ellos, los APK salen con una firma de depuración.
+2. Haz que `coqui` sea la rama predeterminada del repositorio (GitHub solo muestra los flujos manuales que existen en esa rama) y activa Actions si el fork las tiene desactivadas.
+3. En Actions, abre **Coquí: compilar y publicar**, pulsa **Run workflow** y escribe la versión (por ejemplo `1.0.0`).
+4. Al terminar queda publicado el release `coqui-v<versión>` con los archivos de la tabla de descargas.
 
-[Windows](https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.win/x64/sciter.dll) |
-[Linux](https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.lnx/x64/libsciter-gtk.so) |
-[macOS](https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.osx/libsciter.dylib)
+Ese es el único flujo que corre en esta rama, y solo a mano: los flujos heredados de RustDesk ya no se activan con push, pull request ni horarios.
 
-## Raw Steps to build
+## Instalar el servidor
 
-- Prepare your Rust development env and C++ build env
+En un VPS con Ubuntu o Debian:
 
-- Install [vcpkg](https://github.com/microsoft/vcpkg), and set `VCPKG_ROOT` env variable correctly
-
-  - Windows: vcpkg install libvpx:x64-windows-static libyuv:x64-windows-static opus:x64-windows-static aom:x64-windows-static
-  - Linux/macOS: vcpkg install libvpx libyuv opus aom
-
-- run `cargo run`
-
-## [Build](https://rustdesk.com/docs/en/dev/build/)
-
-## How to Build on Linux
-
-### Ubuntu 18 (Debian 10)
-
-```sh
-sudo apt install -y zip g++ gcc git curl wget nasm yasm libgtk-3-dev clang libxcb-randr0-dev libxdo-dev \
-        libxfixes-dev libxcb-shape0-dev libxcb-xfixes0-dev libasound2-dev libpulse-dev cmake make \
-        libclang-dev ninja-build libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+```bash
+curl -fsSL https://yunque-blond.vercel.app/coqui/instalar.sh | sudo bash
 ```
 
-### openSUSE Tumbleweed
+El instalador levanta el servidor de IDs y el relay de RustDesk en Docker y usa los puertos 21115 (TCP), 21116 (TCP y UDP) y 21117 (TCP).
 
-```sh
-sudo zypper install gcc-c++ git curl wget nasm yasm gcc gtk3-devel clang libxcb-devel libXfixes-devel cmake alsa-lib-devel gstreamer-devel gstreamer-plugins-base-devel xdotool-devel
-```
+## Notas de seguridad
 
-### Fedora 28 (CentOS 8)
-
-```sh
-sudo yum -y install gcc-c++ git curl wget nasm yasm gcc gtk3-devel clang libxcb-devel libxdo-devel libXfixes-devel pulseaudio-libs-devel cmake alsa-lib-devel gstreamer1-devel gstreamer1-plugins-base-devel
-```
-
-### Arch (Manjaro)
-
-```sh
-sudo pacman -Syu --needed unzip git cmake gcc curl wget yasm nasm zip make pkg-config clang gtk3 xdotool libxcb libxfixes alsa-lib pipewire
-```
-
-### Install vcpkg
-
-```sh
-git clone https://github.com/microsoft/vcpkg
-cd vcpkg
-git checkout 2023.04.15
-cd ..
-vcpkg/bootstrap-vcpkg.sh
-export VCPKG_ROOT=$HOME/vcpkg
-vcpkg/vcpkg install libvpx libyuv opus aom
-```
-
-### Fix libvpx (For Fedora)
-
-```sh
-cd vcpkg/buildtrees/libvpx/src
-cd *
-./configure
-sed -i 's/CFLAGS+=-I/CFLAGS+=-fPIC -I/g' Makefile
-sed -i 's/CXXFLAGS+=-I/CXXFLAGS+=-fPIC -I/g' Makefile
-make
-cp libvpx.a $HOME/vcpkg/installed/x64-linux/lib/
-cd
-```
-
-### Build
-
-```sh
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source $HOME/.cargo/env
-git clone --recurse-submodules https://github.com/rustdesk/rustdesk
-cd rustdesk
-mkdir -p target/debug
-wget https://raw.githubusercontent.com/c-smile/sciter-sdk/master/bin.lnx/x64/libsciter-gtk.so
-mv libsciter-gtk.so target/debug
-VCPKG_ROOT=$HOME/vcpkg cargo run
-```
-
-## How to build with Docker
-
-Begin by cloning the repository and building the Docker container:
-
-```sh
-git clone https://github.com/rustdesk/rustdesk
-cd rustdesk
-git submodule update --init --recursive
-docker build -t "rustdesk-builder" .
-```
-
-Then, each time you need to build the application, run the following command:
-
-```sh
-docker run --rm -it -v $PWD:/home/user/rustdesk -v rustdesk-git-cache:/home/user/.cargo/git -v rustdesk-registry-cache:/home/user/.cargo/registry -e PUID="$(id -u)" -e PGID="$(id -g)" rustdesk-builder
-```
-
-Note that the first build may take longer before dependencies are cached, subsequent builds will be faster. Additionally, if you need to specify different arguments to the build command, you may do so at the end of the command in the `<OPTIONAL-ARGS>` position. For instance, if you wanted to build an optimized release version, you would run the command above followed by `--release`. The resulting executable will be available in the target folder on your system, and can be run with:
-
-```sh
-target/debug/rustdesk
-```
-
-Or, if you're running a release executable:
-
-```sh
-target/release/rustdesk
-```
-
-Please ensure that you run these commands from the root of the RustDesk repository, or the application may not find the required resources. Also note that other cargo subcommands such as `install` or `run` are not currently supported via this method as they would install or run the program inside the container instead of the host.
-
-## File Structure
-
-- **[libs/hbb_common](https://github.com/rustdesk/rustdesk/tree/master/libs/hbb_common)**: video codec, config, tcp/udp wrapper, and some other utility functions shared with the server
-- **[libs/base](https://github.com/rustdesk/rustdesk/tree/master/libs/base)**: protobuf, fs functions for file transfer, keyboard and platform code used only by this app
-- **[libs/scrap](https://github.com/rustdesk/rustdesk/tree/master/libs/scrap)**: screen capture
-- **[libs/enigo](https://github.com/rustdesk/rustdesk/tree/master/libs/enigo)**: platform specific keyboard/mouse control
-- **[libs/clipboard](https://github.com/rustdesk/rustdesk/tree/master/libs/clipboard)**: file copy and paste implementation for Windows, Linux, macOS.
-- **[src/ui](https://github.com/rustdesk/rustdesk/tree/master/src/ui)**: obsolete Sciter UI (deprecated)
-- **[src/server](https://github.com/rustdesk/rustdesk/tree/master/src/server)**: audio/clipboard/input/video services, and network connections
-- **[src/client.rs](https://github.com/rustdesk/rustdesk/tree/master/src/client.rs)**: start a peer connection
-- **[src/rendezvous_mediator.rs](https://github.com/rustdesk/rustdesk/tree/master/src/rendezvous_mediator.rs)**: Communicate with [rustdesk-server](https://github.com/rustdesk/rustdesk-server), wait for remote direct (TCP hole punching) or relayed connection
-- **[src/platform](https://github.com/rustdesk/rustdesk/tree/master/src/platform)**: platform specific code
-- **[flutter](https://github.com/rustdesk/rustdesk/tree/master/flutter)**: Flutter code for desktop and mobile
-
-## Screenshots
-
-![Connection Manager](https://github.com/rustdesk/rustdesk/assets/28412477/db82d4e7-c4bc-4823-8e6f-6af7eadf7651)
-
-![Connected to a Windows PC](https://github.com/rustdesk/rustdesk/assets/28412477/9baa91e9-3362-4d06-aa1a-7518edcbd7ea)
-
-![File Transfer](https://github.com/rustdesk/rustdesk/assets/28412477/39511ad3-aa9a-4f8c-8947-1cce286a46ad)
-
-![TCP Tunneling](https://github.com/rustdesk/rustdesk/assets/28412477/78e8708f-e87e-4570-8373-1360033ea6c5)
-
+- **La llave pública no es secreta.** Va dentro de la app y cualquiera puede extraerla de un release. Sirve para que la app compruebe que habla con nuestro servidor y no con uno falso. Se guarda como secreto para que no quede escrita en el código, no porque sea confidencial.
+- **Cualquiera que tenga la app puede usar el servidor.** El servidor libre no tiene cuentas, así que la protección real está en cada equipo: usa contraseñas permanentes fuertes o la aprobación con clic, y no compartas el ID junto con la contraseña. Nadie legítimo pide acceso por sorpresa.
+- **Las sesiones van cifradas de extremo a extremo.** El relay solo pasa datos que no puede leer.
+- **Coquí no se actualiza desde RustDesk.** La comprobación de versiones y la actualización automática de RustDesk están desactivadas en esta app; las versiones nuevas salen solo de los Releases de este repositorio.
+- **Verifica lo que instalas.** El ejecutable de Windows no tiene firma de código, así que SmartScreen puede advertir al abrirlo; compara su SHA-256 con `SHA256SUMS.txt`. Descarga solo desde los Releases de este repositorio o desde Yunque.
+- **Guarda las llaves privadas fuera del repositorio.** `id_ed25519` se queda en el servidor y el keystore de Android en un lugar seguro. Si cambias el keystore, Android pedirá desinstalar la versión anterior antes de instalar la nueva.
