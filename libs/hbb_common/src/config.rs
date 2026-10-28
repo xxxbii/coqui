@@ -67,7 +67,7 @@ lazy_static::lazy_static! {
     static ref STATUS: RwLock<Status> = RwLock::new(Status::load());
     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
+    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(COQUI_HOST.to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
     pub static ref APP_NAME: RwLock<String> = RwLock::new("RustDesk".to_owned());
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
@@ -114,8 +114,28 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
-pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+// Coquí: injected at build time (COQUI_HOST / COQUI_KEY). Unset or empty keeps the
+// upstream values; a set host also becomes PROD_RENDEZVOUS_SERVER, so the API server is
+// derived from it instead of falling back to RustDesk's.
+const COQUI_HOST: &str = match option_env!("COQUI_HOST") {
+    Some(host) => host,
+    None => "",
+};
+const COQUI_KEY: &str = match option_env!("COQUI_KEY") {
+    Some(key) => key,
+    None => "",
+};
+
+pub const RENDEZVOUS_SERVERS: &[&str] = &[if COQUI_HOST.is_empty() {
+    "rs-ny.rustdesk.com"
+} else {
+    COQUI_HOST
+}];
+pub const RS_PUB_KEY: &str = if COQUI_KEY.is_empty() {
+    "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
+} else {
+    COQUI_KEY
+};
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
@@ -3013,6 +3033,24 @@ mod tests {
         let cfg: PeerConfig = Default::default();
         let res = toml::to_string_pretty(&cfg);
         assert!(res.is_ok());
+    }
+
+    #[test]
+    fn test_coqui_build_server_and_key() {
+        match option_env!("COQUI_HOST") {
+            Some(host) if !host.is_empty() => {
+                assert_eq!(RENDEZVOUS_SERVERS, &[host]);
+                assert_eq!(*PROD_RENDEZVOUS_SERVER.read().unwrap(), host);
+            }
+            _ => {
+                assert_eq!(RENDEZVOUS_SERVERS, &["rs-ny.rustdesk.com"]);
+                assert!(PROD_RENDEZVOUS_SERVER.read().unwrap().is_empty());
+            }
+        }
+        match option_env!("COQUI_KEY") {
+            Some(key) if !key.is_empty() => assert_eq!(RS_PUB_KEY, key),
+            _ => assert_eq!(RS_PUB_KEY, "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="),
+        }
     }
 
     #[test]
