@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Yunque" "\0"
-            VALUE "FileDescription", "Coquí: escritorio remoto" "\0"
+            VALUE "FileDescription", "Pitirre: escritorio remoto" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "coqui" "\0"
+            VALUE "InternalName", "pitirre" "\0"
             VALUE "LegalCopyright", "Copyright © 2026 Purslane Tech Pte. Ltd. All rights reserved." "\0"
-            VALUE "OriginalFilename", "Coqui.exe" "\0"
-            VALUE "ProductName", "Coquí" "\0"
+            VALUE "OriginalFilename", "Pitirre.exe" "\0"
+            VALUE "ProductName", "Pitirre" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

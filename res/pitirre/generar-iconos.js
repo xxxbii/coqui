@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Genera los íconos de Coquí para Windows, Android y Flutter a partir de los SVG de esta carpeta.
-// Uso, desde la raíz del repositorio: node res/coqui/generar-iconos.js
+// Genera los íconos de Pitirre para Windows, Android y Flutter a partir de los SVG de esta carpeta.
+// Uso, desde la raíz del repositorio: node res/pitirre/generar-iconos.js
 // Requiere Node con el paquete playwright y su Chromium.
 'use strict';
 
@@ -13,9 +13,9 @@ const ANDROID_RES = path.join(ROOT, 'flutter/android/app/src/main/res');
 const DENSITIES = { mdpi: 1, hdpi: 1.5, xhdpi: 2, xxhdpi: 3, xxxhdpi: 4 };
 
 const readSvg = (name) => fs.readFileSync(path.join(__dirname, name), 'utf8').trim();
-const TILE = readSvg('coqui.svg');
-const FIGURE = readSvg('coqui-figura.svg');
-const MONO = readSvg('coqui-mono.svg');
+const TILE = readSvg('pitirre.svg');
+const FIGURE = readSvg('pitirre-figura.svg');
+const MONO = readSvg('pitirre-mono.svg');
 
 const inner = (svg) => svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
 
