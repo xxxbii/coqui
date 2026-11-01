@@ -35,7 +35,17 @@ El código está en `libs/hbb_common/src/config.rs`: si una variable de compilac
 
 ## Cómo compilar
 
-1. Para usar otro servidor, crea las variables del repositorio `COQUI_HOST` y `COQUI_KEY`; si no existen, se usan los valores de la tabla anterior. Para firmar los APK de Android con una llave propia, crea los secretos `ANDROID_SIGNING_KEY` (el keystore en base64), `ANDROID_ALIAS`, `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Sin ellos, los APK salen con una firma de depuración.
+1. Para usar otro servidor, crea las variables del repositorio `COQUI_HOST` y `COQUI_KEY`; si no existen, se usan los valores de la tabla anterior. Para firmar los APK de Android con una llave propia, crea los secretos `ANDROID_SIGNING_KEY` (el keystore en base64), `ANDROID_ALIAS`, `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Sin ellos, todos los APK de un release se firman con una misma llave temporal que cambia en cada release, así que para actualizar hay que desinstalar la versión anterior. Para crear la llave permanente una sola vez (en tu computadora, con Java instalado):
+
+   ```bash
+   keytool -genkeypair -keystore coqui.jks -storetype PKCS12 -alias coqui -keyalg RSA -keysize 3072 -validity 10000 -dname "CN=Coqui"
+   ```
+
+   ```bash
+   base64 -w0 coqui.jks > coqui.jks.b64
+   ```
+
+   El contenido de `coqui.jks.b64` va en `ANDROID_SIGNING_KEY`, `coqui` en `ANDROID_ALIAS` y la contraseña que elegiste en `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Guarda `coqui.jks` en un lugar seguro: si se pierde, no se podrán publicar actualizaciones que se instalen encima.
 2. Haz que `coqui` sea la rama predeterminada del repositorio (GitHub solo muestra los flujos manuales que existen en esa rama) y activa Actions si el fork las tiene desactivadas.
 3. En Actions, abre **Coquí: compilar y publicar**, pulsa **Run workflow** y escribe la versión (por ejemplo `1.0.0`).
 4. Al terminar queda publicado el release `coqui-v<versión>` con los archivos de la tabla de descargas.

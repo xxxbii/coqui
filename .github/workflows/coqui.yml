@@ -881,6 +881,38 @@ jobs:
           merge-multiple: true
           path: dist
 
+      # Sin los secretos de firma, cada trabajo de Android firmaba con su propia llave de depuración
+      # y los APK de un mismo release no se podían instalar uno sobre otro. Aquí se vuelven a firmar
+      # todos con una sola llave temporal que nunca sale de este trabajo.
+      - name: "Coquí: firmar todos los APK con la misma llave"
+        if: env.ANDROID_SIGNING_KEY == ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::warning::Faltan los secretos ANDROID_SIGNING_KEY y compañía. Los APK salen con una llave temporal: para actualizar a la próxima versión habrá que desinstalar esta."
+          apksigner="$(ls -d /usr/local/lib/android/sdk/build-tools/*/ | sort -V | tail -n 1)apksigner"
+          ks="$RUNNER_TEMP/coqui-temporal.jks"
+          pass="$(openssl rand -hex 24)"
+          keytool -genkeypair -noprompt -keystore "$ks" -storetype PKCS12 -alias coqui \
+            -keyalg RSA -keysize 3072 -validity 10000 -dname "CN=Coqui (temporal)" \
+            -storepass "$pass" -keypass "$pass"
+          for f in dist/*.apk; do
+            "$apksigner" sign --ks "$ks" --ks-key-alias coqui --ks-pass "pass:$pass" "$f"
+          done
+          rm -f "$ks" dist/*.idsig
+
+      - name: "Coquí: comprobar que todos los APK tienen la misma firma"
+        shell: bash
+        run: |
+          set -euo pipefail
+          apksigner="$(ls -d /usr/local/lib/android/sdk/build-tools/*/ | sort -V | tail -n 1)apksigner"
+          for f in dist/*.apk; do
+            "$apksigner" verify --print-certs "$f" | grep -m1 'certificate SHA-256 digest' \
+              || { echo "::error::$f no tiene una firma válida"; exit 1; }
+          done | sort -u > firmas.txt
+          cat firmas.txt
+          [ "$(wc -l < firmas.txt)" -eq 1 ] || { echo "::error::Los APK tienen firmas distintas"; exit 1; }
+
       - name: Revisar archivos y calcular SHA256SUMS.txt
         shell: bash
         run: |
