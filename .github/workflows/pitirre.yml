@@ -40,8 +40,8 @@ env:
   # Pitirre: servidor y llave pública que se incrustan al compilar (libs/hbb_common/src/config.rs).
   # No son secretos: van dentro de la app y salen en la página pública de Pitirre. Las variables
   # del repositorio PITIRRE_HOST y PITIRRE_KEY, si existen, reemplazan estos valores.
-  PITIRRE_HOST: ${{ vars.PITIRRE_HOST || vars.COQUI_HOST || 'srv1579804.hstgr.cloud' }}
-  PITIRRE_KEY: ${{ vars.PITIRRE_KEY || vars.COQUI_KEY || 'tkUOZtLzSVmqo1HNGwTSbfenitSHytefffHOq186CVA=' }}
+  PITIRRE_HOST: ${{ vars.PITIRRE_HOST || 'srv1579804.hstgr.cloud' }}
+  PITIRRE_KEY: ${{ vars.PITIRRE_KEY || 'tkUOZtLzSVmqo1HNGwTSbfenitSHytefffHOq186CVA=' }}
   PITIRRE_VERSION: ${{ inputs.version }}
 
 jobs:
