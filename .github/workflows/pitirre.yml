@@ -950,7 +950,7 @@ jobs:
               echo "Los APK de esta versión van firmados con una llave de depuración. Para pasar a otra versión puede hacer falta desinstalar la anterior."
             fi
             echo
-            echo "Código fuente: rama \`coqui\` de este repositorio, bajo la licencia AGPL-3.0. Pitirre es una versión modificada de [RustDesk](https://github.com/rustdesk/rustdesk)."
+            echo "Código fuente: rama \`pitirre\` de este repositorio, bajo la licencia AGPL-3.0. Pitirre es una versión modificada de [RustDesk](https://github.com/rustdesk/rustdesk)."
           } > notas.md
           cat notas.md
 
