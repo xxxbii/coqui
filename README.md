@@ -1,14 +1,14 @@
 # Pitirre
 
-Pitirre (antes Coquí) es el cliente de control remoto de [Yunque](https://yunque-blond.vercel.app). Es una versión modificada de [RustDesk](https://github.com/rustdesk/rustdesk) 1.5.0 que viene configurada de fábrica para conectarse solo a nuestro servidor: no hay que escribir el servidor ni la llave en cada equipo.
+Pitirre es el cliente de control remoto de [Yunque](https://yunque-blond.vercel.app). Es una versión modificada de [RustDesk](https://github.com/rustdesk/rustdesk) 1.5.0 que viene configurada de fábrica para conectarse solo a nuestro servidor: no hay que escribir el servidor ni la llave en cada equipo.
 
 ## Créditos y licencia
 
-Pitirre existe gracias al trabajo del equipo de RustDesk (Purslane Tech Pte. Ltd. y sus colaboradores). Igual que RustDesk, se distribuye bajo la licencia AGPL-3.0; el texto completo está en [LICENCE](LICENCE). El código fuente de cada versión publicada está en la rama `coqui` de este repositorio, y el README original de RustDesk se conserva en [README-RustDesk.md](README-RustDesk.md).
+Pitirre existe gracias al trabajo del equipo de RustDesk (Purslane Tech Pte. Ltd. y sus colaboradores). Igual que RustDesk, se distribuye bajo la licencia AGPL-3.0; el texto completo está en [LICENCE](LICENCE). El código fuente de cada versión publicada está en la rama `pitirre` de este repositorio, y el README original de RustDesk se conserva en [README-RustDesk.md](README-RustDesk.md).
 
 ## Descargas
 
-Las versiones se publican en [Releases](https://github.com/xxxbii/coqui/releases) con la etiqueta `pitirre-v<versión>`:
+Las versiones se publican en [Releases](https://github.com/xxxbii/pitirre/releases) con la etiqueta `pitirre-v<versión>`:
 
 | Archivo | Para qué sirve |
 | --- | --- |
@@ -46,7 +46,7 @@ El código está en `libs/hbb_common/src/config.rs`: si una variable de compilac
    ```
 
    El contenido de `pitirre.jks.b64` va en `ANDROID_SIGNING_KEY`, `pitirre` en `ANDROID_ALIAS` y la contraseña que elegiste en `ANDROID_KEY_STORE_PASSWORD` y `ANDROID_KEY_PASSWORD`. Guarda `pitirre.jks` en un lugar seguro: si se pierde, no se podrán publicar actualizaciones que se instalen encima.
-2. Haz que `coqui` sea la rama predeterminada del repositorio (GitHub solo muestra los flujos manuales que existen en esa rama) y activa Actions si el fork las tiene desactivadas.
+2. Haz que `pitirre` sea la rama predeterminada del repositorio (GitHub solo muestra los flujos manuales que existen en esa rama) y activa Actions si el fork las tiene desactivadas.
 3. En Actions, abre **Pitirre: compilar y publicar**, pulsa **Run workflow** y escribe la versión (por ejemplo `1.0.0`).
 4. Al terminar queda publicado el release `pitirre-v<versión>` con los archivos de la tabla de descargas.
 
